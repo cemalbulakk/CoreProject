@@ -1,4 +1,6 @@
-﻿namespace Persistence.Dynamic;
+﻿using Core.Persistence.Dynamic;
+
+namespace Persistence.Dynamic;
 
 public class Dynamic
 {
