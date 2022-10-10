@@ -31,7 +31,6 @@ namespace API.Controllers
                 var response = await _userService.GetListAsync(x => x.IsActive && !x.IsDelete, null, null, request.Page,
                     request.PageSize);
 
-
                 return CreateActionResult(Response<IPaginate<User>>.Success(response, 200));
             }
             catch (Exception e)

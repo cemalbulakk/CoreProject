@@ -1,7 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using Persistence.Dynamic;
 using Persistence.Paging;
 
 namespace Persistence.Repositories;
@@ -36,20 +35,6 @@ public class EfRepositoryBase<TEntity, TContext> : IAsyncRepository<TEntity>, IR
         if (predicate != null) queryable = queryable.Where(predicate);
         if (orderBy != null)
             return await orderBy(queryable).ToPaginateAsync(index, size, 0, cancellationToken);
-        return await queryable.ToPaginateAsync(index, size, 0, cancellationToken);
-    }
-
-    public async Task<IPaginate<TEntity>> GetListByDynamicAsync(Persistence.Dynamic.Dynamic dynamic,
-                                                                Func<IQueryable<TEntity>,
-                                                                        IIncludableQueryable<TEntity, object>>?
-                                                                    include = null,
-                                                                int index = 0, int size = 10,
-                                                                bool enableTracking = true,
-                                                                CancellationToken cancellationToken = default)
-    {
-        IQueryable<TEntity> queryable = Query().AsQueryable().ToDynamic(dynamic);
-        if (!enableTracking) queryable = queryable.AsNoTracking();
-        if (include != null) queryable = include(queryable);
         return await queryable.ToPaginateAsync(index, size, 0, cancellationToken);
     }
 
@@ -96,17 +81,6 @@ public class EfRepositoryBase<TEntity, TContext> : IAsyncRepository<TEntity>, IR
         if (predicate != null) queryable = queryable.Where(predicate);
         if (orderBy != null)
             return orderBy(queryable).ToPaginate(index, size);
-        return queryable.ToPaginate(index, size);
-    }
-
-    public IPaginate<TEntity> GetListByDynamic(Persistence.Dynamic.Dynamic dynamic,
-                                               Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>?
-                                                   include = null, int index = 0, int size = 10,
-                                               bool enableTracking = true)
-    {
-        IQueryable<TEntity> queryable = Query().AsQueryable().ToDynamic(dynamic);
-        if (!enableTracking) queryable = queryable.AsNoTracking();
-        if (include != null) queryable = include(queryable);
         return queryable.ToPaginate(index, size);
     }
 
