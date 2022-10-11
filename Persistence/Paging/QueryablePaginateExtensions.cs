@@ -8,6 +8,7 @@ public static class QueryablePaginateExtensions
         int from = 0,
         CancellationToken cancellationToken = default)
     {
+        if (size == 0) size = 10;
         if (from > index) throw new ArgumentException($"From: {from} > Index: {index}, must from <= Index");
 
         int count = await source.CountAsync(cancellationToken).ConfigureAwait(false);

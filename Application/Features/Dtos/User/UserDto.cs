@@ -2,10 +2,12 @@
 
 public class UserDto
 {
-    public String FirstName { get; set; }
-    public String LastName { get; set; }
-    public String UserName { get; set; }
-
-    public String Email { get; set; }
-    public String Password { get; set; }
+    public virtual string Id { get; set; }
+    public virtual string UserName { get; set; }
+    public virtual string Email { get; set; }
+    public virtual string PhoneNumber { get; set; }
+    public virtual bool TwoFactorEnabled { get; set; }
+    public virtual DateTimeOffset? LockoutEnd { get; set; }
+    public virtual bool LockoutEnabled { get; set; }
+    public virtual int AccessFailedCount { get; set; }
 }

@@ -12,12 +12,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Dtos\Auth\" />
     <Folder Include="Features\Dtos\User\" />
     <Folder Include="Features\Mapping\" />
     <Folder Include="Requests\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Persistence\Persistence.csproj" />
   </ItemGroup>

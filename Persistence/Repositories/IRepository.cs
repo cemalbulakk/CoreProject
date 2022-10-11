@@ -14,6 +14,8 @@ public interface IRepository<T> : IQuery<T> where T : class
         int index = 0, int size = 10,
         bool enableTracking = true);
 
+    int Count(Expression<Func<T, bool>> predicate);
+
     T Add(T entity);
     T Update(T entity);
     T Delete(T entity);

@@ -84,6 +84,11 @@ public class EfRepositoryBase<TEntity, TContext> : IAsyncRepository<TEntity>, IR
         return queryable.ToPaginate(index, size);
     }
 
+    public int Count(Expression<Func<TEntity, bool>> predicate)
+    {
+        return Context.Set<TEntity>().Count(predicate);
+    }
+
     public TEntity Add(TEntity entity)
     {
         Context.Entry(entity).State = EntityState.Added;

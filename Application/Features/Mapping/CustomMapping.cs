@@ -8,7 +8,7 @@ public class CustomMapping : Profile
 {
     public CustomMapping()
     {
-        CreateMap<User, CreateUserDto>().ReverseMap();
-        CreateMap<User, UserDto>().ReverseMap();
+        CreateMap<ApplicationUser, CreateUserDto>().ReverseMap();
+        CreateMap<ApplicationUser, UserDto>().ReverseMap();
     }
 }
