@@ -1,16 +1,16 @@
+using API.Filters;
 using Application;
 using Domain;
 using Domain.Contexts.Ef;
+using Domain.Entities;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
-using API.Filters;
-using Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -39,5 +39,5 @@ public class UserRoleService : EfRepositoryBase<UserRole, AppDbContext>, IUserRo
         return Response<UserRole>.Success(updateResult, 200);
     }
 
-    
+
 }

@@ -1,12 +1,12 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using Application.Features.Dtos.Auth;
+﻿using Application.Features.Dtos.Auth;
 using Application.Services.Interfaces;
 using Common.Dtos;
 using Common.Helpers;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Infrastructure.Services.Concrete;
 

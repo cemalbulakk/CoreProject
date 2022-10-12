@@ -1,13 +1,12 @@
-﻿using Application.Services.Interfaces;
+﻿using Application.Features.Dtos.Role;
+using Application.Features.Dtos.RoleGroup;
+using Application.Features.Dtos.UserRole;
+using Application.Services.Interfaces;
+using AutoMapper;
 using Common.BaseController;
 using Common.Dtos;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
-using Application.Features.Dtos.Role;
-using AutoMapper;
-using Application.Features.Dtos.RoleGroup;
-using Application.Features.Dtos.UserRole;
 
 namespace API.Controllers
 {

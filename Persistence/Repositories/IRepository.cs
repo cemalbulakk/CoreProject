@@ -1,6 +1,6 @@
-﻿using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore.Query;
+﻿using Microsoft.EntityFrameworkCore.Query;
 using Persistence.Paging;
+using System.Linq.Expressions;
 
 namespace Persistence.Repositories;
 

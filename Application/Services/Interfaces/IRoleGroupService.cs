@@ -5,5 +5,5 @@ namespace Application.Services.Interfaces;
 
 public interface IRoleGroupService : IAsyncRepository<RoleGroup>, IRepository<RoleGroup>
 {
-    
+
 }
