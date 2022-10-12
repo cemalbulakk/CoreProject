@@ -9,6 +9,7 @@
   <ItemGroup>
     <Folder Include="BaseController\" />
     <Folder Include="Dtos\" />
+    <Folder Include="Enums\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -12,10 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Dtos\Auth\" />
-    <Folder Include="Features\Dtos\User\" />
+    <Folder Include="Features\Dtos\Role\" />
     <Folder Include="Features\Mapping\" />
     <Folder Include="Requests\" />
+    <Folder Include="Services\Interfaces\" />
   </ItemGroup>
 
   <ItemGroup>

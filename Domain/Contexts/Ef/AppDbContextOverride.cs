@@ -1,7 +1,4 @@
-﻿using Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-
-namespace Domain.Contexts.Ef;
+﻿namespace Domain.Contexts.Ef;
 
 public partial class AppDbContext
 {

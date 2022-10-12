@@ -1,17 +1,15 @@
 using Application;
 using Domain;
 using Domain.Contexts.Ef;
-using Domain.Entities;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using API.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,12 +61,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// rol bazlý attribute lar çalýþsýn diye eklendi
-builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
-        .AddRoleManager<RoleManager<ApplicationRole>>()
-        .AddEntityFrameworkStores<AppDbContext>()
-        .AddDefaultTokenProviders();
-
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "Platform Demo API", Version = "v1" });
@@ -96,6 +88,8 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
+
+builder.Services.AddScoped<PermissionFilter>();
 
 var app = builder.Build();
 

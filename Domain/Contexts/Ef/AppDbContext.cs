@@ -1,26 +1,25 @@
 ﻿using Domain.Entities;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Contexts.Ef;
 
-public partial class AppDbContext : IdentityDbContext<ApplicationUser>
+public partial class AppDbContext : DbContext
 {
-    public readonly IHttpContextAccessor HttpContextAccessor;
 
-    public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor httpContextAccessor)
+    public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
     {
-        HttpContextAccessor = httpContextAccessor;
     }
-
-    public DbSet<ApplicationUserTokens> ApplicationUserTokens { get; set; }
-    public DbSet<ApplicationRole> ApplicationRoles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
     }
+
+    public DbSet<Product> Products { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<UserRole> UserRoles { get; set; }
+    public DbSet<RoleGroup> RoleGroups { get; set; }
 }
 
