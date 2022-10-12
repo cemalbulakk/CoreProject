@@ -12,6 +12,11 @@ public static class InfrastructureServiceRegistration
     {
 
         services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<IRoleGroupService, RoleGroupService>();
+        services.AddScoped<IUserRoleService, UserRoleService>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<ITokenService, TokenService>();
 
         return services;
     }

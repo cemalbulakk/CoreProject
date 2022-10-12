@@ -2,7 +2,7 @@
 
 public class RoleModel
 {
-    public int RoleId { get; set; }
+    public string RoleId { get; set; }
     public string UserId { get; set; }
     public int RoleGroupId { get; set; }
     public long BitwiseId { get; set; }

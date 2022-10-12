@@ -5,6 +5,7 @@ using Common.Dtos;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
+using System.Security.Claims;
 
 namespace API.Filters;
 
@@ -19,7 +20,7 @@ public class PermissionFilter : CustomBaseController, IActionFilter
 
     public void OnActionExecuting(ActionExecutingContext context)
     {
-        var userId = context.HttpContext.Request.Headers["UserId"].FirstOrDefault();
+        var userId = context.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (!HasRoleAttribute(context)) return;
         try
         {
@@ -29,7 +30,7 @@ public class PermissionFilter : CustomBaseController, IActionFilter
             var roleGroupId = (int)(arguments?[0].Value ?? throw new InvalidOperationException());
             var bitwiseId = (long)(arguments[1].Value ?? throw new InvalidOperationException());
             var role = _roleService.GetRoleById(userId ?? throw new InvalidOperationException(), roleGroupId, bitwiseId);
-            if (role.Data.RoleId == 0)
+            if (string.IsNullOrWhiteSpace(role.Data.RoleId))
             {
                 context.Result = CreateActionResult(Response<NoContent>.Fail(
                     "You are not authorized for this app.",

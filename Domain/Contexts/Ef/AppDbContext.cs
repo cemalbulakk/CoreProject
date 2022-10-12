@@ -1,9 +1,10 @@
 ﻿using Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Contexts.Ef;
 
-public partial class AppDbContext : DbContext
+public partial class AppDbContext : IdentityDbContext<User, Role, string>
 {
 
     public AppDbContext(DbContextOptions<AppDbContext> options)

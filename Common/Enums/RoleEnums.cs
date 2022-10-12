@@ -4,7 +4,7 @@ public class RoleEnums
 {
     public enum RoleGroup
     {
-        User = 1
+        User = 3
     }
 
     public enum UserRoles

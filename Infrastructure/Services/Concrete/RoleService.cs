@@ -28,7 +28,7 @@ public class RoleService : EfRepositoryBase<Role, AppDbContext>, IRoleService
                 var model = new RoleModel()
                 {
                     RoleId = role.Id,
-                    RoleName = role.RoleName,
+                    RoleName = role.Name,
                     RoleGroupId = userRole.RoleGroupId,
                     BitwiseId = bitwiseId,
                     UserId = userId,
@@ -59,7 +59,7 @@ public class RoleService : EfRepositoryBase<Role, AppDbContext>, IRoleService
                            select new RoleModel()
                            {
                                RoleId = role.Id,
-                               RoleName = role.RoleName,
+                               RoleName = role.Name,
                                RoleGroupId = role.RoleGroupId,
                                BitwiseId = role.BitwiseId,
                                UserId = userId,
@@ -68,5 +68,42 @@ public class RoleService : EfRepositoryBase<Role, AppDbContext>, IRoleService
         }
 
         return Response<List<RoleModel>>.Success(model, 200);
+    }
+
+    public async Task<Response<Role>> CreateRole(RoleCreateDto roleCreateDto)
+    {
+        try
+        {
+            var allRolesFromGroup = Context.Roles.Where(x => x.RoleGroupId.Equals(roleCreateDto.RoleGroupId));
+            if (!allRolesFromGroup.Any())
+            {
+                var newRole = new Role()
+                {
+                    BitwiseId = 1,
+                    Name = roleCreateDto.Name,
+                    RoleGroupId = roleCreateDto.RoleGroupId,
+                    NormalizedName = roleCreateDto.Name.ToUpper()
+                };
+
+                var newRoleResult = await base.AddAsync(newRole);
+                return Response<Role>.Success(newRoleResult, 200);
+            }
+
+            var lastRoleInGroup = allRolesFromGroup.OrderBy(x => x.BitwiseId).Last();
+
+            var newRoleInGroup = new Role()
+            {
+                BitwiseId = lastRoleInGroup.BitwiseId * 2,
+                Name = roleCreateDto.Name,
+                RoleGroupId = roleCreateDto.RoleGroupId,
+                NormalizedName = roleCreateDto.Name.ToUpper()
+            };
+            var newRoleInGroupResult = await base.AddAsync(newRoleInGroup);
+            return Response<Role>.Success(newRoleInGroupResult, 200);
+        }
+        catch (Exception e)
+        {
+            return Response<Role>.Fail($"{e.Message} ..::.. {e.InnerException?.Message}", 500);
+        }
     }
 }

@@ -4,6 +4,7 @@ using Domain.Contexts.Ef;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Domain.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221012101813_initial")]
+    partial class initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,12 +174,6 @@ namespace Domain.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("RefreshTokenExpiryTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -356,7 +352,7 @@ namespace Domain.Migrations
             modelBuilder.Entity("Domain.Entities.Role", b =>
                 {
                     b.HasOne("Domain.Entities.RoleGroup", "RoleGroup")
-                        .WithMany("Roles")
+                        .WithMany()
                         .HasForeignKey("RoleGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -436,8 +432,6 @@ namespace Domain.Migrations
 
             modelBuilder.Entity("Domain.Entities.RoleGroup", b =>
                 {
-                    b.Navigation("Roles");
-
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
