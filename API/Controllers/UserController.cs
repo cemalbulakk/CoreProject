@@ -47,7 +47,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [RoleAttribute((int)RoleEnums.RoleGroup.User, (Int64)RoleEnums.UserRoles.Admin)]
+        [Role(RoleEnums.RoleGroup.User, (Int64)RoleEnums.UserRoles.Admin)]
         public async Task<IActionResult> GetUsers([FromQuery] PageRequest request)
         {
             var users = await _userService.GetListAsync(size: request.PageSize, index: request.Page);

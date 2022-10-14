@@ -27,10 +27,10 @@ public class PermissionFilter : CustomBaseController, IActionFilter
             var arguments = ((ControllerActionDescriptor)context.ActionDescriptor).MethodInfo.CustomAttributes
                 .FirstOrDefault(fd => fd.AttributeType == typeof(RoleAttribute))?.ConstructorArguments;
 
-            var roleGroupId = (int)(arguments?[0].Value ?? throw new InvalidOperationException());
+            var roleGroupId = (string)(arguments?[0].Value ?? throw new InvalidOperationException());
             var bitwiseId = (long)(arguments[1].Value ?? throw new InvalidOperationException());
             var role = _roleService.GetRoleById(userId ?? throw new InvalidOperationException(), roleGroupId, bitwiseId);
-            if (string.IsNullOrWhiteSpace(role.Data.RoleId))
+            if (!role.IsSuccessful)
             {
                 context.Result = CreateActionResult(Response<NoContent>.Fail(
                     "You are not authorized for this app.",

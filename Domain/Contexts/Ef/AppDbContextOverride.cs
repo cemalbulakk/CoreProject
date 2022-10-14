@@ -21,10 +21,10 @@ public partial class AppDbContext
                         switch (entry.State)
                         {
                             case EntityState.Added:
+                                tractable.Id = Guid.NewGuid().ToString("D");
                                 tractable.CreateDate = now;
                                 tractable.CreateBy = authenticatedUserId ?? throw new InvalidOperationException(); //1
                                 tractable.IsActive = true;
-                                tractable.RowGuid = Guid.NewGuid();
                                 break;
 
                             case EntityState.Modified:

@@ -1,5 +1,6 @@
 ﻿using Application.Features.Dtos.Role;
 using Application.Services.Interfaces;
+using AutoMapper;
 using Common.Dtos;
 using Domain.Contexts.Ef;
 using Domain.Entities;
@@ -10,11 +11,13 @@ namespace Infrastructure.Services.Concrete;
 
 public class RoleService : EfRepositoryBase<Role, AppDbContext>, IRoleService
 {
-    public RoleService(AppDbContext context) : base(context)
+    private readonly IMapper _mapper;
+    public RoleService(AppDbContext context, IMapper mapper) : base(context)
     {
+        _mapper = mapper;
     }
 
-    public Response<RoleModel> GetRoleById(string userId, int roleGroupId, long bitwiseId)
+    public Response<RoleModel> GetRoleById(string userId, string roleGroupId, long bitwiseId)
     {
         var userRole = Context.UserRoles.Include(x => x.RoleGroup)
             .FirstOrDefault(ur => ur.UserId.Equals(userId) && ur.RoleGroupId.Equals(roleGroupId));
@@ -23,49 +26,40 @@ public class RoleService : EfRepositoryBase<Role, AppDbContext>, IRoleService
         {
             if (bitwiseId != (userRole.Roles & bitwiseId)) return Response<RoleModel>.Fail("role not found.", 404);
             var role = Context.Roles.FirstOrDefault(x => x.BitwiseId == bitwiseId);
-            if (role is not null)
+            if (role is null) return Response<RoleModel>.Fail("role not found.", 404);
+            var model = new RoleModel()
             {
-                var model = new RoleModel()
-                {
-                    RoleId = role.Id,
-                    RoleName = role.Name,
-                    RoleGroupId = userRole.RoleGroupId,
-                    BitwiseId = bitwiseId,
-                    UserId = userId,
-                    RoleGroupName = userRole.RoleGroup.RoleGroupName
-                };
-                return Response<RoleModel>.Success(model, 200);
-            }
-            else
-            {
-                return Response<RoleModel>.Fail("role not found.", 404);
-            }
-
+                RoleId = role.Id,
+                RoleName = role.Name,
+                RoleGroupId = userRole.RoleGroupId,
+                BitwiseId = bitwiseId,
+                UserId = userId,
+                RoleGroupName = userRole.RoleGroup.RoleGroupName
+            };
+            return Response<RoleModel>.Success(model, 200);
         }
 
     }
 
-    public Response<List<RoleModel>> GetRoleListByGroupId(string userId, int roleGroupId)
+    public Response<List<RoleModel>> GetRoleListByGroupId(string userId, string roleGroupId)
     {
         var model = new List<RoleModel>();
         var userRole = Context.UserRoles.FirstOrDefault(ur => ur.UserId == userId && ur.RoleGroupId == roleGroupId);
-        if (userRole != null)
-        {
-            var allRoles = Context.Roles
-                .Include(r => r.RoleGroup)
-                .Where(r => r.RoleGroupId == roleGroupId).ToList();
-            model.AddRange(from role in allRoles
-                           where role.BitwiseId == (userRole.Roles & role.BitwiseId)
-                           select new RoleModel()
-                           {
-                               RoleId = role.Id,
-                               RoleName = role.Name,
-                               RoleGroupId = role.RoleGroupId,
-                               BitwiseId = role.BitwiseId,
-                               UserId = userId,
-                               RoleGroupName = role.RoleGroup.RoleGroupName
-                           });
-        }
+        if (userRole == null) return Response<List<RoleModel>>.Success(model, 200);
+        var allRoles = Context.Roles
+            .Include(r => r.RoleGroup)
+            .Where(r => r.RoleGroupId == roleGroupId).ToList();
+        model.AddRange(from role in allRoles
+                       where role.BitwiseId == (userRole.Roles & role.BitwiseId)
+                       select new RoleModel()
+                       {
+                           RoleId = role.Id,
+                           RoleName = role.Name,
+                           RoleGroupId = role.RoleGroupId,
+                           BitwiseId = role.BitwiseId,
+                           UserId = userId,
+                           RoleGroupName = role.RoleGroup.RoleGroupName
+                       });
 
         return Response<List<RoleModel>>.Success(model, 200);
     }
@@ -74,7 +68,7 @@ public class RoleService : EfRepositoryBase<Role, AppDbContext>, IRoleService
     {
         try
         {
-            var allRolesFromGroup = Context.Roles.Where(x => x.RoleGroupId.Equals(roleCreateDto.RoleGroupId));
+            var allRolesFromGroup = await Context.Roles.Where(x => x.RoleGroupId.Equals(roleCreateDto.RoleGroupId)).ToListAsync();
             if (!allRolesFromGroup.Any())
             {
                 var newRole = new Role()
@@ -84,7 +78,6 @@ public class RoleService : EfRepositoryBase<Role, AppDbContext>, IRoleService
                     RoleGroupId = roleCreateDto.RoleGroupId,
                     NormalizedName = roleCreateDto.Name.ToUpper()
                 };
-
                 var newRoleResult = await base.AddAsync(newRole);
                 return Response<Role>.Success(newRoleResult, 200);
             }

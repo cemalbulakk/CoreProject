@@ -7,7 +7,7 @@ namespace Application.Services.Interfaces;
 
 public interface IRoleService : IAsyncRepository<Role>, IRepository<Role>
 {
-    public Response<RoleModel> GetRoleById(string userId, int roleGroupId, long bitwiseId);
-    public Response<List<RoleModel>> GetRoleListByGroupId(string userId, int roleGroupId);
+    public Response<RoleModel> GetRoleById(string userId, string roleGroupId, long bitwiseId);
+    public Response<List<RoleModel>> GetRoleListByGroupId(string userId, string roleGroupId);
     public Task<Response<Role>> CreateRole(RoleCreateDto roleCreateDto);
 }

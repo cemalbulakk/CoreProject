@@ -3,12 +3,12 @@
 [AttributeUsage(AttributeTargets.All)]
 public class RoleAttribute : Attribute
 {
-    public RoleAttribute(int roleGroupId, long bitwiseId)
+    public RoleAttribute(string roleGroupId, long bitwiseId)
     {
         RoleGroupId = roleGroupId;
         BitwiseId = bitwiseId;
     }
 
-    public int RoleGroupId { get; }
+    public string RoleGroupId { get; }
     public long BitwiseId { get; }
 }
