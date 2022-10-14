@@ -1,4 +1,5 @@
-﻿using Application.Features.Dtos.Category;
+﻿using System.Collections;
+using Application.Features.Dtos.Category;
 using Application.Features.Dtos.Products;
 using Application.Features.Dtos.Role;
 using Application.Features.Dtos.RoleGroup;
@@ -39,5 +40,6 @@ public class CustomMapping : Profile
         CreateMap<RoleCreateDto, Role>().ReverseMap();
 
         #endregion
+
     }
 }
