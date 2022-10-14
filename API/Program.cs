@@ -87,7 +87,15 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddScoped<PermissionFilter>();
 
+
+
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dataContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    dataContext.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

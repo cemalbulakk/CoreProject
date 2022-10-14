@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Domain.Contexts.Ef;
 
@@ -8,6 +9,8 @@ public partial class AppDbContext
     private void OnBeforeSaving()
     {
         var entries = ChangeTracker.Entries();
+        var authenticatedUserId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
         foreach (var entry in entries)
         {
             switch (entry.Entity)
@@ -19,15 +22,14 @@ public partial class AppDbContext
                         {
                             case EntityState.Added:
                                 tractable.CreateDate = now;
-                                tractable.UpdateDate = now;
-                                tractable.CreateBy = 1; //1
+                                tractable.CreateBy = authenticatedUserId ?? throw new InvalidOperationException(); //1
                                 tractable.IsActive = true;
                                 tractable.RowGuid = Guid.NewGuid();
                                 break;
 
                             case EntityState.Modified:
                                 tractable.UpdateDate = now;
-                                tractable.UpdateBy = 1;//1
+                                tractable.UpdateBy = authenticatedUserId;//1
                                 break;
 
                             case EntityState.Detached:
@@ -35,12 +37,11 @@ public partial class AppDbContext
                             case EntityState.Deleted:
                                 tractable.IsActive = false;
                                 tractable.UpdateDate = now;
-                                tractable.UpdateBy = 1;//1
+                                tractable.UpdateBy = authenticatedUserId;//1
                                 break;
                             default:
                                 throw new ArgumentOutOfRangeException();
                         }
-
                         break;
                     }
             }
